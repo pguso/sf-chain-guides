@@ -35,19 +35,19 @@ class Block {
       nonce++;
       timestamp = Date.now();
       difficulty = Block.adjustDifficulty(lastBlock, timestamp);
-      hash = Block.hash(timestamp, lastHash, data, nonce, difficulty);
+      hash = Block.generateHash(timestamp, lastHash, data, nonce, difficulty);
     } while (hash.substring(0, difficulty) !== '0'.repeat(difficulty));
 
     return new this(timestamp, lastHash, hash, data, nonce, difficulty);
   }
 
-  static hash(timestamp, lastHash, data, nonce, difficulty) {
+  static generateHash(timestamp, lastHash, data, nonce, difficulty) {
     return ChainUtil.hash(`${timestamp}${lastHash}${data}${nonce}${difficulty}`).toString();
   }
 
   static blockHash(block) {
     const { timestamp, lastHash, data, nonce, difficulty } = block;
-    return Block.hash(timestamp, lastHash, data, nonce, difficulty);
+    return Block.generateHash(timestamp, lastHash, data, nonce, difficulty);
   }
 
   static adjustDifficulty(lastBlock, currentTime) {
